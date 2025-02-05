@@ -24,7 +24,7 @@ export interface CommonApiParams {
   sort?: "newest" | "oldest" | "relevance";
   from_date?: string;
   to_date?: string;
-  categories?: string[];
+  sources?: NewsSourceUnion[];
 }
 
 export enum NewsSource {
@@ -37,3 +37,8 @@ export type NewsSourceUnion =
   | `${NewsSource.NEWSAPI}`
   | `${NewsSource.GUARDIAN}`
   | `${NewsSource.NYT}`;
+
+export interface NewsSourceOption {
+  value: NewsSourceUnion;
+  label: string;
+}

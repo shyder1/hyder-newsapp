@@ -56,7 +56,7 @@ export const components: Components<Theme> = {
             backgroundColor: "#ffffff", // White background when focused
           },
           "& .MuiInputBase-input": {
-            height: "14px",
+            height: "18px",
 
             color: "#333333", // Dark text color
             fontWeight: 500, // Slightly bolder text

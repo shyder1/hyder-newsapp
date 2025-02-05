@@ -8,7 +8,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import Autocomplete from "../../components/Autocomplete";
 import { useParams } from "react-router-dom";
 import { useSingleNews } from "../../api/query/query-functions/all-news";
 import { isNewsSource } from "../../api/utils/helpers/typeCheckers";
@@ -16,17 +15,18 @@ import { NewsSourceUnion } from "../../types/news.types";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import parse from "html-react-parser";
 import _ from "lodash";
+import ArticleDetailSkeleton from "../../components/ui/skeletons/ArticleDetailSkeleton";
 
 const ArticleDetail = () => {
   const { id, source } = useParams();
 
-  const decodedId = decodeURIComponent(id);
+  // const decodedId = decodeURIComponent(id);
   // Check if source is valid first
   const isValidSource = source ? isNewsSource(source) : false;
 
   // Now we can safely use source as it's been validated
   const { data, isLoading, isFetching, isError, error } = useSingleNews(
-    decodedId,
+    id,
     source as NewsSourceUnion,
     isValidSource
   );
@@ -45,7 +45,9 @@ const ArticleDetail = () => {
 
   return (
     <Stack>
-      {data ? (
+      {isFetching ? (
+        <ArticleDetailSkeleton />
+      ) : (
         <Container maxWidth="lg">
           <Stack spacing={4} sx={{ py: 2 }}>
             {/* Header Section */}
@@ -86,8 +88,6 @@ const ArticleDetail = () => {
             </Stack>
           </Stack>
         </Container>
-      ) : (
-        <div>No data found</div>
       )}
     </Stack>
   );

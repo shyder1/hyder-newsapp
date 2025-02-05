@@ -6,9 +6,11 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Box,
 } from "@mui/material";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import { Link } from "react-router-dom";
+import { NEWS_SOURCES } from "../../api/statis";
 
 interface BaseNewsProps {
   className?: string;
@@ -26,11 +28,12 @@ const NewsCard: React.FC<Props> = ({ news, children, ...props }) => {
 
   return (
     <Link
-      to={`article/${newsSource}/${encodeURIComponent(id)}`}
+      to={`/article/${newsSource}/${encodeURIComponent(id)}`}
       style={{
         width: isDesktop ? "calc(33.3% - 11px)" : "100%",
         textDecoration: "none",
       }}
+      replace
     >
       <Card
         sx={{
@@ -41,8 +44,20 @@ const NewsCard: React.FC<Props> = ({ news, children, ...props }) => {
           "&:hover": {
             boxShadow: 6,
           },
+          position: "relative",
         }}
       >
+        <Box
+          className="absolute top-4 left-4 z-30 rounded-lg"
+          sx={{
+            bgcolor: "primary.main",
+            color: "#FFFFFF",
+            p: "4px",
+            px: "8px",
+          }}
+        >
+          {NEWS_SOURCES[news?.newsSource]}
+        </Box>
         {/* Image Section */}
         <Stack
           sx={{

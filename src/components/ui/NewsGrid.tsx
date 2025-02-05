@@ -63,7 +63,7 @@ const NewsGrid: FC<Props> = ({ newsList }) => {
         useFlexGap
         flexWrap="wrap"
         flex={1}
-        justifyContent={"space-between"}
+        justifyContent={"start"}
         gap={"16px"}
       >
         {newsList?.map((newsArticle, index) => (

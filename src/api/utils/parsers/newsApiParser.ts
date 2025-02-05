@@ -8,7 +8,7 @@ import _ from "lodash";
 import dayjs from "dayjs";
 
 export const parseNewsApiArticle = (article: NewsArticle): Article => ({
-  id: article.url.split(".com")[1],
+  id: article.title,
   title: article.title,
   description: article.description,
   url: article.url,
@@ -34,7 +34,7 @@ export const getNewsApiQueryParams = (
 export const getSingleNewsApiQueryParams = (id: string): NewsApiQueryParams => {
   const newsParams: NewsApiQueryParams = {
     q: id,
-    searchIn: "title",
+    searchIn: "title,description",
   };
 
   return newsParams;

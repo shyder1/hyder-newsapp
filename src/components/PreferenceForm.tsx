@@ -1,63 +1,65 @@
 import { Button, IconButton, Stack, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import AutocompleteMultiSelect from "./ui/AutoComplete";
 import Cancel from "@mui/icons-material/Cancel";
 
-const PreferenceForm = () => {
-  const [selectedOptions, setSelectedOptions] = useState([]);
+import Filters from "./Filters";
+import { usePreferences } from "../contexts/PreferencesContext";
+import { NEWS_CATEGORIES, NEWS_SOURCES } from "../api/statis";
+import _ from "lodash";
+import { NewsSourceOption } from "../types/news.types";
 
-  // Example options - can be simple array or array of objects
-  const options = [
-    { value: "apple", label: "Apple" },
-    { value: "banana", label: "Banana" },
-    { value: "cherry", label: "Cherry" },
-    { value: "date", label: "Date" },
-    { value: "elderberry", label: "Elderberry" },
+interface Props {
+  onClose: () => void;
+}
+
+const PreferenceForm: FC<Props> = ({ onClose }) => {
+  const { categories, addCategories, newsSources, addNewsSources } =
+    usePreferences();
+
+  const categorySelected = [
+    ...categories.map((obj) => ({
+      value: obj,
+      label: _.capitalize(obj),
+    })),
   ];
 
+  const newsSourcesSelected: NewsSourceOption[] = newsSources?.map((value) => ({
+    value: value,
+    label: NEWS_SOURCES[value],
+  }));
+  const [categoryValues, setCategoryValues] = useState<AutocompleteOption[]>([
+    ...categorySelected,
+  ]);
+  const [sourceValues, setSourceValues] = useState<NewsSourceOption[]>([
+    ...newsSourcesSelected,
+  ]);
+
+  const handleSave = () => {
+    const categoriesValue = categoryValues.map((obj) => obj?.value);
+    const sourcesValue = sourceValues.map((obj) => obj?.value);
+    addCategories(categoriesValue);
+    addNewsSources(sourcesValue);
+    onClose();
+  };
+
   return (
-    <Stack className="w-full h-full p-4 flex-col relative" spacing={2}>
-      <Stack>
-        <AutocompleteMultiSelect
-          label="News Source"
-          options={options}
-          value={selectedOptions}
-          onChange={setSelectedOptions}
-          placeholder="Select News Source"
-          customColors={{
-            hoverBorder: "#ff4400",
-            focusBorder: "#ff4400",
-            chipBackground: "#ff4400",
-            chipColor: "white",
-          }}
-          fullWidth
-        />
-      </Stack>
-      <Stack sx={{ mt: 1 }}>
-        <AutocompleteMultiSelect
-          label="News Source"
-          options={options}
-          value={selectedOptions}
-          onChange={setSelectedOptions}
-          placeholder="Select News Source"
-          customColors={{
-            hoverBorder: "#ff4400",
-            focusBorder: "#ff4400",
-            chipBackground: "#ff4400",
-            chipColor: "white",
-          }}
-          fullWidth
-        />
-      </Stack>
-      <Stack>
-        <Button
-          variant="contained"
-          className="absolute bottom-0 mt-32"
-          sx={{ position: "absolute", bottom: "8px", right: "8px" }}
-        >
-          Save
-        </Button>
-      </Stack>
+    <Stack className="w-full h-auto p-4 flex-col relative pb-14" spacing={2}>
+      <Filters
+        variant="preference"
+        categories={categoryValues}
+        setCategories={setCategoryValues}
+        sources={sourceValues}
+        setSources={setSourceValues}
+      />
+      <Button
+        variant="contained"
+        className="absolute bottom-0 mt-32"
+        sx={{ position: "absolute", bottom: "8px", right: "16px" }}
+        onClick={handleSave}
+      >
+        Save
+      </Button>
     </Stack>
   );
 };

@@ -28,7 +28,7 @@ const CustomModal = ({ open, onClose, title, children }) => {
         </Stack>
 
         <Typography variant="h5" sx={{ mb: 1, mt: 2, ml: "1rem" }}>
-          Your preferences
+          {title}
         </Typography>
 
         {children}

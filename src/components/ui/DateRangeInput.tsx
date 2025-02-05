@@ -50,7 +50,13 @@ const DateRangeInput = ({ onDateChange }: DateRangeProps) => {
 
   return (
     <div className="flex flex-col justify-start items-start">
-      <Box className="flex flex-row justify-start items-center">
+      <Box
+        className="flex justify-start items-center"
+        sx={{
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: { xs: "start", md: "center" },
+        }}
+      >
         <TextField
           label="Start Date"
           type="date"
@@ -75,7 +81,7 @@ const DateRangeInput = ({ onDateChange }: DateRangeProps) => {
           }}
           sx={{
             ...commonStyles,
-            ml: 1,
+            ml: { xs: 0, md: 1 },
           }}
           error={!!error}
         />

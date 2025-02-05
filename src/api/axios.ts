@@ -211,48 +211,95 @@ class ApiService {
       const guardianApiParams = convertToGuardianApi(param);
       const nytimesApiParams = convertToNytApi(param);
 
-      const [newsApiResponse, guardianResponse, newyorkTimesApiResponse] =
-        await Promise.all([
-          this.news.searchEverything({
-            ...newsApiParams,
-            q: param?.q ? param?.q : initialQueryString,
-            pageSize: 10,
-          }),
-          this.guardian.searchEverything({
-            ...guardianApiParams,
-            q: param?.q ? param?.q : initialQueryString,
-            "page-size": 10,
-          }),
-          this.newyorkTimes?.searchEverything({
-            ...nytimesApiParams,
-            q: param?.q ? param?.q : initialQueryString,
-          }),
-        ]);
+      console.log("SRECEUVED: ", param?.q || initialQueryString);
+
+      const queryString = param?.q || initialQueryString;
+
+      const apiRequests =
+        param?.sources?.length > 0
+          ? param?.sources
+              ?.map((key) => {
+                switch (key) {
+                  case NewsSource?.NEWSAPI:
+                    return this.news.searchEverything({
+                      ...newsApiParams,
+                      q: queryString,
+                      pageSize: 10,
+                    });
+
+                  case NewsSource?.GUARDIAN:
+                    return this.guardian.searchEverything({
+                      ...guardianApiParams,
+                      q: queryString,
+                      "page-size": 10,
+                    });
+
+                  case NewsSource?.NYT:
+                    return this.newyorkTimes?.searchEverything({
+                      ...nytimesApiParams,
+                      q: queryString,
+                    });
+
+                  default:
+                    return null;
+                }
+              })
+              .filter(Boolean)
+          : [
+              this.news.searchEverything({
+                ...newsApiParams,
+                q: queryString,
+                pageSize: 10,
+              }),
+              this.guardian.searchEverything({
+                ...guardianApiParams,
+                q: queryString,
+                "page-size": 10,
+              }),
+              this.newyorkTimes?.searchEverything({
+                ...nytimesApiParams,
+                q: queryString,
+              }),
+            ];
+
+      console.log("API RESULTS 1: ", apiRequests);
+
+      // Execute all requests
+      const results = await Promise.all(apiRequests);
+
+      console.log("API RESULTS 2: ", results);
+
+      // Create an object with results mapped to their API keys
+      const apiResults =
+        param?.sources?.length > 0
+          ? param?.sources?.reduce((acc, key, index) => {
+              acc[key] = results[index];
+              return acc;
+            }, {})
+          : Object.values(NewsSource)?.reduce((acc, key, index) => {
+              acc[key] = results[index];
+              return acc;
+            }, {});
+
+      console.log("API RESULTS 3: ", apiResults);
 
       const newsApiUnified =
-        newsApiResponse?.data?.articles?.map((obj) =>
+        apiResults?.[NewsSource?.NEWSAPI]?.data?.articles?.map((obj) =>
           parseNewsApiArticle(obj)
         ) || [];
       const guardianUnified =
-        guardianResponse?.data?.response?.results?.map((obj) =>
-          parseGuardianArticle(obj)
+        apiResults?.[NewsSource?.GUARDIAN]?.data?.response?.results?.map(
+          (obj) => parseGuardianArticle(obj)
         ) || [];
 
       const newYorktimesApiUnified =
-        newyorkTimesApiResponse?.data?.response?.docs?.map((obj) =>
+        apiResults?.[NewsSource?.NYT]?.data?.response?.docs?.map((obj) =>
           parseNewyorkTimesArticle(obj)
         ) || [];
 
       console.log("NAPI: ", newsApiUnified);
       console.log("GAPI: ", guardianUnified);
       console.log("NYTAPI: ", newYorktimesApiUnified);
-
-      console.log(
-        "TRESULTS: ",
-        newsApiResponse.data?.totalResults +
-          guardianResponse?.data?.response?.total +
-          newyorkTimesApiResponse?.data?.response?.meta?.hits
-      );
 
       return {
         articles: [
@@ -261,14 +308,17 @@ class ApiService {
           ...newYorktimesApiUnified,
         ],
         totalResults:
-          newsApiResponse.data?.totalResults +
-          guardianResponse?.data?.response?.total +
-          newyorkTimesApiResponse?.data?.response?.meta?.hits,
+          apiResults?.[NewsSource?.NEWSAPI].data?.totalResults +
+          apiResults?.[NewsSource?.GUARDIAN]?.data?.response?.total +
+          apiResults?.[NewsSource?.NYT]?.data?.response?.meta?.hits,
         currentPage: 1,
         hasMore:
-          newsApiResponse?.data?.totalResults > param?.page * 10 ||
-          guardianResponse?.data?.response?.total > param?.page * 10 ||
-          newyorkTimesApiResponse?.data?.response?.meta.hits > param?.page * 10,
+          apiResults?.[NewsSource?.NEWSAPI]?.data?.totalResults >
+            param?.page * 10 ||
+          apiResults?.[NewsSource?.GUARDIAN]?.data?.response?.total >
+            param?.page * 10 ||
+          apiResults?.[NewsSource?.NYT]?.data?.response?.meta.hits >
+            param?.page * 10,
       };
     } catch (error) {
       console.error("Error fetching all news:", error);
@@ -278,21 +328,23 @@ class ApiService {
 
   async getNewsById(id: string, source: NewsSourceUnion): Promise<Article> {
     try {
+      console.log("ID: ", id);
       switch (source) {
-        case NewsSource?.NEWSAPI: {
+        case NewsSource.NEWSAPI: {
           const result = await this.news.getById(id);
+          console.log("RESULT: ", result);
           // Since NewsAPI might return multiple articles, we take the first one
           const article = result?.data?.articles?.[0];
           return parseNewsApiArticle(article);
         }
 
-        case NewsSource?.GUARDIAN: {
+        case NewsSource.GUARDIAN: {
           const result = await this.guardian.getById(id);
           const article = result?.data?.response?.results?.[0];
           return parseGuardianArticle(article);
         }
 
-        case NewsSource?.NYT: {
+        case NewsSource.NYT: {
           const result = await this.newyorkTimes.getById(id);
           const article = result?.data?.response?.docs?.[0];
           return parseNewyorkTimesArticle(article);

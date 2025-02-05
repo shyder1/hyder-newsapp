@@ -81,17 +81,6 @@ const AutocompleteMultiSelect = ({
           InputProps={{
             ...params.InputProps,
             placeholder: value.length === 0 ? placeholder : "",
-            // startAdornment: value.length <= 0 && (
-            //   <div
-            //     style={{
-            //       color: "#666",
-            //       marginRight: "8px",
-            //       fontSize: "14px",
-            //     }}
-            //   >
-            //     {placeholder}
-            //   </div>
-            // ),
           }}
           variant="outlined"
           sx={{
@@ -105,6 +94,7 @@ const AutocompleteMultiSelect = ({
               "&::placeholder": {
                 opacity: 1,
                 color: "#666",
+                fontSize: "16px",
               },
             },
             "& .MuiInputLabel-root": {

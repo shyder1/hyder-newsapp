@@ -11,5 +11,5 @@ export const NEWS_CATEGORIES = [
 export const NEWS_SOURCES = {
   newsapi: "News Api",
   guardian: "Guardian",
-  newyorkTimes: "Newyork Times",
+  newyorkTimes: "New York Times",
 };
