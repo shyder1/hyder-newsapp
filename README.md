@@ -2,6 +2,21 @@
 
 A news aggregation application built with React, integrating The Guardian, News API, and New York Times APIs.
 
+## Demo
+
+### Home Page
+![Home Page](./demo/home.png)
+*News feed showing latest articles from multiple sources*
+
+### Article View
+![Article View](./demo/article.png)
+*Detailed article view with source attribution*
+
+### Search Results
+![Search Interface](./demo/search.png)
+*Search interface with filters and sorting options*
+
+
 ## Technology Stack
 
 - **React 18**
