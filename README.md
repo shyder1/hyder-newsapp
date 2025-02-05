@@ -9,7 +9,7 @@ A news aggregation application built with React, integrating The Guardian, News 
 *News feed showing latest articles from multiple sources*
 
 ### Article View
-![Article View](./demo/article-detail.png)
+![Article View](./demo/article-details.png)
 *Detailed article view with source attribution*
 
 ### Search Results
