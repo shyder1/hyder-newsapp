@@ -1,6 +1,4 @@
-import React from "react";
-import { Box, Stack, Tab, Tabs } from "@mui/material";
-import Autocomplete from "../SearchFilters/SearchFilters";
+import { Stack } from "@mui/material";
 import HomeView from "./Home";
 
 const Home = () => {

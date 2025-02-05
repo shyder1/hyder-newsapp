@@ -11,7 +11,6 @@ export interface Props {
 
 const Search: FC<Props> = ({ setSearch }) => {
   const [searchField, setSearchField] = useState("");
-  const [searchPhrase, setSearchPhrase] = useState("");
 
   const search = useCallback(
     _.debounce((phrase: string) => {
@@ -22,7 +21,7 @@ const Search: FC<Props> = ({ setSearch }) => {
 
   useEffect(() => {
     search(searchField);
-  }, [searchField]);
+  }, [searchField, search]);
 
   return (
     <Stack spacing={2} gap={2}>
@@ -40,7 +39,7 @@ const Search: FC<Props> = ({ setSearch }) => {
                 <SearchIcon />
               </InputAdornment>
             ),
-            endAdornment: searchPhrase && (
+            endAdornment: searchField && (
               <InputAdornment position="end" sx={{ pr: "8px" }}>
                 <IconButton onClick={() => setSearchField("")} edge="end">
                   <Cancel />

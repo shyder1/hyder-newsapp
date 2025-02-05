@@ -1,12 +1,5 @@
-import {
-  Modal,
-  Box,
-  Typography,
-  IconButton,
-  Button,
-  Stack,
-} from "@mui/material";
-import CancelIcon from "@mui/icons-material/Cancel";
+import { Modal, Typography, IconButton, Stack } from "@mui/material";
+
 import { Cancel } from "@mui/icons-material";
 
 const CustomModal = ({ open, onClose, title, children }) => {

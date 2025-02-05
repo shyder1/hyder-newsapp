@@ -36,7 +36,6 @@ import { NEWS_CATEGORIES } from "./statis";
 import {
   getSingleNytApiQueryParams,
   parseNewyorkTimesArticle,
-  getNytApiQueryParams,
 } from "./utils/parsers/nytTimesParser";
 
 const apiKeys = {
@@ -62,7 +61,6 @@ const apiConfigs = {
   newyorkTimes: {
     baseURL: "https://api.nytimes.com/svc/search/v2",
   },
-  // Add more API configurations as needed
 };
 
 // Create axios instances for each API
@@ -99,9 +97,6 @@ const createApiInstance = (config) => {
         originalError: error,
         timestamp: new Date().toISOString(),
       };
-
-      // Log error for debugging
-      console.error(`API Error:`, customError);
 
       return Promise.reject(customError);
     }
@@ -203,15 +198,12 @@ class ApiService {
     },
   };
 
-  // Method to get news from all sources in unified format
   async getAllNews(param: CommonApiParams): Promise<ArticlesResponse> {
     try {
       const initialQueryString = NEWS_CATEGORIES.join(" OR ");
       const newsApiParams = convertToNewsApi(param);
       const guardianApiParams = convertToGuardianApi(param);
       const nytimesApiParams = convertToNytApi(param);
-
-      console.log("SRECEUVED: ", param?.q || initialQueryString);
 
       const queryString = param?.q || initialQueryString;
 
@@ -262,14 +254,8 @@ class ApiService {
               }),
             ];
 
-      console.log("API RESULTS 1: ", apiRequests);
-
-      // Execute all requests
       const results = await Promise.all(apiRequests);
 
-      console.log("API RESULTS 2: ", results);
-
-      // Create an object with results mapped to their API keys
       const apiResults =
         param?.sources?.length > 0
           ? param?.sources?.reduce((acc, key, index) => {
@@ -280,8 +266,6 @@ class ApiService {
               acc[key] = results[index];
               return acc;
             }, {});
-
-      console.log("API RESULTS 3: ", apiResults);
 
       const newsApiUnified =
         apiResults?.[NewsSource?.NEWSAPI]?.data?.articles?.map((obj) =>
@@ -296,10 +280,6 @@ class ApiService {
         apiResults?.[NewsSource?.NYT]?.data?.response?.docs?.map((obj) =>
           parseNewyorkTimesArticle(obj)
         ) || [];
-
-      console.log("NAPI: ", newsApiUnified);
-      console.log("GAPI: ", guardianUnified);
-      console.log("NYTAPI: ", newYorktimesApiUnified);
 
       return {
         articles: [
@@ -328,12 +308,10 @@ class ApiService {
 
   async getNewsById(id: string, source: NewsSourceUnion): Promise<Article> {
     try {
-      console.log("ID: ", id);
       switch (source) {
         case NewsSource.NEWSAPI: {
           const result = await this.news.getById(id);
-          console.log("RESULT: ", result);
-          // Since NewsAPI might return multiple articles, we take the first one
+
           const article = result?.data?.articles?.[0];
           return parseNewsApiArticle(article);
         }

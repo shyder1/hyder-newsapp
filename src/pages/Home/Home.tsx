@@ -1,35 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import apiService from "../../api/axios";
-import {
-  GuardianApiResponse,
-  GuardianResponse,
-} from "../../types/guardian-news.types";
-import { AxiosResponse } from "axios";
-import { ArticlesResponse, NewsSource } from "../../types/news.types";
-// import { Pagination } from "flowbite-react";
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  IconButton,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { useMemo, useState } from "react";
+
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { useAllNews } from "../../api/query/query-functions/all-news";
 import NewsGrid from "../../components/ui/NewsGrid";
-import Filters from "../../components/Filters";
 import NewsSkeletonGrid from "../../components/ui/skeletons/NewsGridSkeleton";
-// import { NYTResponse } from "@/types/newyork-times-news.types";
+
 import _ from "lodash";
 import EditIcon from "@mui/icons-material/Edit";
 import PreferenceForm from "../../components/PreferenceForm";
 import CustomModal from "../../components/ui/Modal";
 import { usePreferences } from "../../contexts/PreferencesContext";
-import { NEWS_SOURCES } from "../../api/statis";
-import PaginationSkeleton from "../../components/ui/skeletons/PaginationSkeleton";
 import Pagination from "../../components/ui/Pagination";
 
 const HomeView = () => {

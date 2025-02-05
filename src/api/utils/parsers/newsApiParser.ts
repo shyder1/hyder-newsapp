@@ -4,7 +4,6 @@ import {
   CommonApiParams,
   NewsSource,
 } from "../../../types/news.types";
-import _ from "lodash";
 import dayjs from "dayjs";
 
 export const parseNewsApiArticle = (article: NewsArticle): Article => ({

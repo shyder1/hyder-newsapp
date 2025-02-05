@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 import TopBar from "./TopBar";
 import { Box } from "@mui/material";

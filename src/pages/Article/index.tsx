@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import {
   Box,
   Container,
@@ -12,7 +12,6 @@ import { useParams } from "react-router-dom";
 import { useSingleNews } from "../../api/query/query-functions/all-news";
 import { isNewsSource } from "../../api/utils/helpers/typeCheckers";
 import { NewsSourceUnion } from "../../types/news.types";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import parse from "html-react-parser";
 import _ from "lodash";
 import ArticleDetailSkeleton from "../../components/ui/skeletons/ArticleDetailSkeleton";
@@ -20,8 +19,6 @@ import ArticleDetailSkeleton from "../../components/ui/skeletons/ArticleDetailSk
 const ArticleDetail = () => {
   const { id, source } = useParams();
 
-  // const decodedId = decodeURIComponent(id);
-  // Check if source is valid first
   const isValidSource = source ? isNewsSource(source) : false;
 
   // Now we can safely use source as it's been validated
@@ -30,10 +27,6 @@ const ArticleDetail = () => {
     source as NewsSourceUnion,
     isValidSource
   );
-
-  useEffect(() => {
-    console.log("DATA ARTICLE: ", data);
-  }, [data]);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));

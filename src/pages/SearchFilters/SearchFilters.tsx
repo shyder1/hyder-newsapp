@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
 import { NewsSourceOption } from "@/types/news.types";
-// import { Pagination } from "flowbite-react";
 import { Box, Stack, Typography } from "@mui/material";
 import { useAllNews } from "../../api/query/query-functions/all-news";
 import NewsGrid from "../../components/ui/NewsGrid";
@@ -32,10 +31,12 @@ const SearchFilters = () => {
     () =>
       _.debounce(
         (phrase, categories) =>
-          `${phrase ? `${phrase} AND ` : ""}${categories?.join(" OR ")}`,
+          `${
+            phrase ? `${phrase}${categories?.length > 0 ? " AND " : ""}` : ""
+          }${categories?.join(" OR ")}`,
         1000
       ),
-    [] // Empty dependency array since we want to create the debounced function once
+    []
   );
 
   const searchQuery = useMemo(

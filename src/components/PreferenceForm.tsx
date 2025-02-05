@@ -1,11 +1,9 @@
-import { Button, IconButton, Stack, Typography } from "@mui/material";
-import React, { FC, useState } from "react";
-import AutocompleteMultiSelect from "./ui/AutoComplete";
-import Cancel from "@mui/icons-material/Cancel";
+import { Button, Stack } from "@mui/material";
+import { FC, useState } from "react";
 
 import Filters from "./Filters";
 import { usePreferences } from "../contexts/PreferencesContext";
-import { NEWS_CATEGORIES, NEWS_SOURCES } from "../api/statis";
+import { NEWS_SOURCES } from "../api/statis";
 import _ from "lodash";
 import { NewsSourceOption } from "../types/news.types";
 

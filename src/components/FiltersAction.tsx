@@ -1,13 +1,6 @@
 import { NewsSourceOption } from "@/types/news.types";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import {
-  Box,
-  Button,
-  IconButton,
-  Menu,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { FC, useState } from "react";
 import Filters from "./Filters";
 import { Clear } from "@mui/icons-material";
