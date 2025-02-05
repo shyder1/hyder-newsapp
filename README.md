@@ -2,6 +2,37 @@
 
 A news aggregation application built with React, integrating The Guardian, News API, and New York Times APIs.
 
+## Technology Stack
+
+- **React 18**
+  - Modern UI library for building responsive user interfaces
+  - Leveraging latest features like automatic batching and concurrent rendering
+
+- **Material-UI (MUI)**
+  - Component library providing pre-built, customizable React components
+  - Implements Material Design principles for consistent UI/UX
+  - Used for core interface components and responsive layouts
+
+- **Tailwind CSS**
+  - Utility-first CSS framework
+  - Used alongside MUI for custom styling and responsive design
+  - Enables rapid UI development with pre-built utility classes
+
+- **React Context**
+  - State management solution for application-wide data
+  - Manages theme, authentication, and global application state
+  - Provides a lightweight alternative to Redux for this scale of application
+
+- **React Query**
+  - Data-fetching and state management library
+  - Handles API caching, loading states, and data synchronization
+  - Provides optimistic updates and automatic background refetching
+
+- **Docker**
+  - Containerization for consistent development and deployment environments
+  - Nginx-based production build for optimal performance
+  - Simplifies deployment and ensures application portability
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -82,6 +113,48 @@ View container logs:
 docker logs <container-id>
 ```
 
+## Project Structure
+
+```
+src/
+├── api/                  # API integration and service calls
+│   ├── query/           # React Query hooks and configurations
+│   ├── utils/           # API utilities and parsers
+│   └── axios/           # Axios service configuration and interceptors
+├── components/          # React components
+│   ├── ui/             # Reusable MUI component library
+│   └── [ComponentName] # Feature-specific components
+├── contexts/           # React Context providers and hooks
+├── pages/              # Route components and page layouts
+├── theme/              # MUI theme configuration
+│   ├── palette/        # Color schemes
+│   ├── typography/     # Font settings
+│   └── components/     # Component-specific theme overrides
+└── types/              # TypeScript type definitions and interfaces
+```
+
+### Directory Details
+
+- **api/**
+  - `query/`: React Query configurations for data fetching and caching
+  - `utils/`: Parser utilities and API helper functions
+  - `axios/`: Centralized Axios instance and interceptor configuration
+
+- **components/**
+  - `ui/`: Reusable Material-UI components (buttons, inputs, etc.)
+  - Feature-specific components organized by functionality
+
+- **contexts/**
+  - Application-wide state management using React Context API
+  - Context providers and custom hooks
+
+- **theme/**
+  - Material-UI theme customization
+  - Global styling configurations
+  - Component style overrides
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -102,21 +175,3 @@ Builds the app for production to the `build` folder.
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-## Security Notes
-
-- It's recommended to use environment variables for API keys rather than building them into the Docker image
-- Consider using a secrets management system for production deployments
-- API keys in Docker build arguments are visible in the image history
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details
